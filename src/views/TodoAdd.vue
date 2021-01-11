@@ -30,7 +30,6 @@ export default {
   }),
   methods: {
     setPriority(p) {
-      console.log(p)
       this.todoPriority = p;
       if (p == 0) {
         this.priority = "red";

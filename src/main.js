@@ -5,6 +5,7 @@ import { auth } from './firebaseHelper'
 import store from './store'
 
 Vue.config.productionTip = false
+Vue.config.devtools = true;
 
 import VueMaterial from 'vue-material'
 import 'vue-material/dist/vue-material.min.css'

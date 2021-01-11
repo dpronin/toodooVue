@@ -17,36 +17,15 @@ const auth = firebase.auth()
 const provider = new firebase.auth.GoogleAuthProvider();
 provider.addScope('profile');
 provider.addScope('email');
-const login = () => {
-  firebase.auth().signInWithRedirect(provider)
-    .then(function (result) {
-      console.log(result);
-    })
-    .catch(function (error) {
-      const errorCode = error.code;
-      const errorMessage = error.message;
-      const email = error.email;
-      const credential = error.credential;
-      console.log(errorCode, errorMessage, email, credential);
-    })
-};
-const logout = () => {
-  firebase.auth().signOut()
-    .then(function () { })
-    .catch(function (error) {
-      console.log(error)
-    });
-}
+
 // collection references
 const usersCollection = db.collection('users')
 const todosCollection = db.collection('todos')
 
 // export utils/refs
 export {
-  db,
   usersCollection,
   todosCollection,
   auth,
-  login,
-  logout,
+  provider
 }

@@ -7,12 +7,11 @@
 </template>
 
 <script>
-import { login } from "../firebaseHelper";
 
 export default {
   methods: {
     loginWithGoogle() {
-      login();
+      this.$store.dispatch("login");
     },
   },
 };

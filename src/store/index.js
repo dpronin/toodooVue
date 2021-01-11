@@ -5,56 +5,60 @@ import router from '../router/index'
 
 Vue.use(Vuex)
 
-// realtime firebase
-fb.todosCollection.onSnapshot(snapshot => {
-	let postsArray = []
+// listen firebase stream
+fb.auth.onAuthStateChanged((user) => {
+	store.commit('setUserProfile', user)
+	if (!user) return
+	fb.todosCollection
+	.where('userId', '==', user.uid)  
+	.orderBy("priority")
+	.onSnapshot(snapshot => {
+		let todosArray = []
 
-	snapshot.forEach(doc => {
-		let post = doc.data()
-		post.id = doc.id
+		snapshot.forEach(doc => {
+			let post = doc.data()
+			post.id = doc.id
 
-		postsArray.push(post)
+			todosArray.push(post)
+		})
+		store.commit('setTodos', todosArray)
 	})
-
-	store.commit('setPosts', postsArray)
-})
+});
 
 const store = new Vuex.Store({
 	state: {
-		userProfile: {},
-		posts: []
+		todos: [],
+		user: fb.auth.currentUser
 	},
 	mutations: {
 		setUserProfile(state, val) {
-			state.userProfile = val
+			state.user = val
+			router.push('/')
 		},
 		setPerformingRequest(state, val) {
 			state.performingRequest = val
 		},
-		setPosts(state, val) {
-			state.posts = val
-		}
+		setTodos(state, val) {
+			state.todos = val
+		},
 	},
 	actions: {
-		async login({ dispatch }, form) {
-			// sign user in
-			const { user } = await fb.auth.signInWithEmailAndPassword(form.email, form.password)
-
-			// fetch user profile and set in state
-			dispatch('fetchUserProfile', user)
+		async login() {
+			await fb.auth.signInWithRedirect(fb.provider)
 		},
 		async logout({ commit }) {
-			// log user out
 			await fb.auth.signOut()
-
-			// clear user data from state
-			commit('setUserProfile', {})
-
-			// redirect to login view
+			commit('setUserProfile', null)
 			router.push('/login')
 		},
+		async fetchUserProfile({ commit }, user) {
+			const userProfile = await fb.usersCollection.doc(user.uid).get()
+			commit('setUserProfile', userProfile.data())
+			if (router.currentRoute.path === '/login') {
+				router.push('/')
+			}
+		},
 		async createTodo({ state, commit }, todo) {
-			// create post in firebase
 			console.log(state, commit);
 			await fb.todosCollection.add({
 				createdOn: new Date(),
@@ -71,14 +75,15 @@ const store = new Vuex.Store({
 		},
 		async removeTodo({ state, commit }, todo) {
 			console.log(state, commit);
-			
-			fb.todosCollection.doc(todo.id).delete().then(function() {
+
+			fb.todosCollection.doc(todo.id).delete().then(function () {
 				console.log("Document successfully deleted!");
-			}).catch(function(error) {
+			}).catch(function (error) {
 				console.error("Error removing document: ", error);
 			});
 		},
 	}
 })
+
 
 export default store
