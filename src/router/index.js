@@ -22,7 +22,7 @@ const routes = [
   {
     path: '/todo',
     name: 'Todo',
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../views/Todo.vue'),
     meta: {
       requiresAuth: true
     }

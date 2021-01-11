@@ -1,28 +1,49 @@
 <template>
-  <div class="home">
-    <md-content>
-    <Todo/>
-    <md-button class="md-raised md-primary">Primary</md-button>
-    </md-content>
+  <div class="todos">
+    <md-list v-if="posts.length">
+      <div v-for="todo in posts" :key="todo.id">
+        <Todo v-bind:todo="todo" />
+      </div>
+    </md-list>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Todo from '@/components/Todo.vue'
-import Vue from 'vue'
-import { MdButton, MdContent, MdTabs } from 'vue-material/dist/components'
-import 'vue-material/dist/vue-material.min.css'
-import 'vue-material/dist/theme/default.css'
+import Todo from "@/components/Todo.vue";
+import { todosCollection } from "../firebaseHelper";
+import { mapState } from "vuex";
 
-Vue.use(MdButton)
-Vue.use(MdContent)
-Vue.use(MdTabs)
+let todos = [];
 
 export default {
-  name: 'Todos',
+  name: "Todos",
   components: {
     Todo,
-  }
-}
+  },
+  computed: {
+    ...mapState(["userProfile", "posts"]),
+  },
+  data() {
+    return {
+      todos: todos,
+    };
+  },
+  updated() {
+    console.log(todos.length);
+  },
+  created() {
+    let t = [];
+    todosCollection.onSnapshot((snap) => {
+      snap.forEach((doc) => {
+        let data = {
+          id: doc.id,
+          name: doc.data().name,
+        };
+        t.push(data);
+      });
+      this.todos = t;
+    });
+  },
+};
 </script>
