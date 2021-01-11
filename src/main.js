@@ -12,7 +12,6 @@ import 'vue-material/dist/theme/default.css'
 
 Vue.use(VueMaterial)
 
-
 let app
 auth.onAuthStateChanged(() => {
   if (!app) {

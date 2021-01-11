@@ -43,31 +43,6 @@ const store = new Vuex.Store({
 			// fetch user profile and set in state
 			dispatch('fetchUserProfile', user)
 		},
-		async signup({ dispatch }, form) {
-			// sign user up
-			const { user } = await fb.auth.createUserWithEmailAndPassword(form.email, form.password)
-
-			// create user object in userCollections
-			await fb.usersCollection.doc(user.uid).set({
-				name: form.name,
-				title: form.title
-			})
-
-			// fetch user profile and set in state
-			dispatch('fetchUserProfile', user)
-		},
-		async fetchUserProfile({ commit }, user) {
-			// fetch user profile
-			const userProfile = await fb.usersCollection.doc(user.uid).get()
-
-			// set user profile in state
-			commit('setUserProfile', userProfile.data())
-
-			// change route to dashboard
-			if (router.currentRoute.path === '/login') {
-				router.push('/')
-			}
-		},
 		async logout({ commit }) {
 			// log user out
 			await fb.auth.signOut()
@@ -78,16 +53,30 @@ const store = new Vuex.Store({
 			// redirect to login view
 			router.push('/login')
 		},
-		async createPost({ state }, post) {
+		async createTodo({ state, commit }, todo) {
 			// create post in firebase
-			await fb.postsCollection.add({
+			console.log(state, commit);
+			await fb.todosCollection.add({
 				createdOn: new Date(),
-				content: post.content,
+				name: todo.todoName,
 				userId: fb.auth.currentUser.uid,
-				userName: state.userProfile.name,
-				comments: 0,
-				likes: 0
+				priority: todo.todoPriority,
 			})
+			router.push('/')
+		},
+		async updateTodo({ commit }, todo) {
+			console.log(commit);
+
+			await fb.todosCollection.doc(todo.id).update(todo)
+		},
+		async removeTodo({ state, commit }, todo) {
+			console.log(state, commit);
+			
+			fb.todosCollection.doc(todo.id).delete().then(function() {
+				console.log("Document successfully deleted!");
+			}).catch(function(error) {
+				console.error("Error removing document: ", error);
+			});
 		},
 	}
 })

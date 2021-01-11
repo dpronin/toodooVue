@@ -1,23 +1,12 @@
 <template>
   <div class="hello">
-    <md-card class="md-primary" md-theme="purple-card" md-with-hover>
+    <md-card class="md-primary" :style="colorStyle(todo.priority)" md-theme="purple-card" md-with-hover>
       <md-card-header>
         <div class="md-title">{{ todo.name }}</div>
-        <div class="md-subhead"></div>
       </md-card-header>
-
-      <md-card-content> </md-card-content>
       <md-card-actions>
-        <md-button  class="md-icon-button">
-          <md-avatar class="md-avatar-icon md-small priority-red"></md-avatar>
-        </md-button>
-        <md-button  class="md-icon-button">
-          <md-avatar class="md-avatar-icon md-small priority-yellow"></md-avatar>
-        </md-button>
-        <md-button  class="md-icon-button">
-          <md-avatar class="md-avatar-icon md-small priority-green"></md-avatar>
-        </md-button>
-        <md-button class="md-icon-button" @click="remove(todo.id)">
+        <Priorities @onHappy="updatePriority"/>
+        <md-button class="md-icon-button" @click="remove()">
           <md-icon>delete</md-icon>
         </md-button>
       </md-card-actions>
@@ -26,31 +15,31 @@
 </template>
 
 <script>
-import { todosCollection } from "../firebaseHelper";
+import Priorities from "@/components/Priorities.vue";
 
 export default {
   name: "Todo",
   props: ["todo"],
+  components: {
+    Priorities
+  },
   methods: {
-    remove(id) {
-      todosCollection.doc(id).delete().then(function() {
-          console.log("Document successfully deleted!");
-      }).catch(function(error) {
-          console.error("Error removing document: ", error);
-      });
+    colorStyle(prioty) {
+      let color = "#fdd9d7"
+      if (prioty == 1) {
+        color = "#cdeefd"
+      } else if (prioty == 2) {
+        color = "#dbefdc"
+      }
+      return { backgroundColor: `${color} !important`}
+    },
+    updatePriority(p) {
+      this.todo.priority = p;
+      this.$store.dispatch('updateTodo', this.todo)
+    },
+    remove() {
+      this.$store.dispatch('removeTodo', this.todo)
     },
   },
 };
 </script>
-
-<style>
-.priority-red {
-  background-color: red;
-}
-.priority-yellow {
-  background-color: yellow;
-}
-.priority-green {
-  background-color: green;
-}
-</style>

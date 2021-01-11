@@ -20,12 +20,9 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/Login.vue'),
   },
   {
-    path: '/todo',
-    name: 'Todo',
-    component: () => import(/* webpackChunkName: "about" */ '../views/Todo.vue'),
-    meta: {
-      requiresAuth: true
-    }
+    path: '/add',
+    name: 'Add',
+    component: () => import(/* webpackChunkName: "about" */ '../views/TodoAdd.vue'),
   }
 ]
 
