@@ -1,6 +1,6 @@
 <template>
-  <div class="hello">
-    <md-card class="md-primary" :style="colorStyle(todo.priority)" md-theme="purple-card" md-with-hover>
+  <div class="todo">
+    <md-card class="md-primary" :style="colorStyle(todo.priority)" md-theme="primary-card">
       <md-card-header>
         <div class="md-title">{{ todo.name }}</div>
       </md-card-header>
@@ -43,3 +43,8 @@ export default {
   },
 };
 </script>
+<style scoped>
+.todo {
+  width: 100%;
+}
+</style>
