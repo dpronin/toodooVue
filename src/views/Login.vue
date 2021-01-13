@@ -1,8 +1,14 @@
 <template>
   <div id="login">
-    <md-button @click="loginWithGoogle()" class="md-raised md-primary"
-      >LoginWithGoogle</md-button
+    <md-empty-state
+        md-icon="login"
+        md-label="Login via social networks"
+      >
+      <md-button @click="loginWithGoogle()" class="md-raised md-primary"
+      >Login with Google</md-button
     >
+      </md-empty-state>
+    
   </div>
 </template>
 

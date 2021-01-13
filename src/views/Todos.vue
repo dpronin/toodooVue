@@ -1,21 +1,23 @@
 <template>
   <div class="todos">
-    <md-list v-if="todos.length">
-      <div class="md-layout">
-        <Todo
-          v-for="todo in todos"
-          :key="todo.id"
-          class="md-layout-item 
-          md-xlarge-25 
-          md-large-25 
-          md-medium-size-33 
-          md-small-size-50 
-          md-xsmall-size-100
-          todo"
-          v-bind:todo="todo"
-        />
-      </div>
-    </md-list>
+    <waterfall
+      v-if="todos.length"
+      :line-gap="200"
+      :min-line-gap="100"
+      :max-line-gap="220"
+      :single-max-width="300"
+    >
+      <waterfall-slot
+        v-for="(item, index) in todos"
+        :width="1"
+        :height="1"
+        :order="index"
+        :key="item.id"
+        move-class="item-move"
+      >
+        <Todo :todo="item" />
+      </waterfall-slot>
+    </waterfall>
     <div v-else>
       <md-empty-state
         md-icon="add_task"
@@ -31,11 +33,15 @@
 // @ is an alias to /src
 import Todo from "@/components/Todo.vue";
 import { mapState } from "vuex";
+import Waterfall from "vue-waterfall/lib/waterfall";
+import WaterfallSlot from "vue-waterfall/lib/waterfall-slot";
 
 export default {
   name: "Todos",
   components: {
     Todo,
+    Waterfall,
+    WaterfallSlot,
   },
   computed: {
     ...mapState(["userProfile", "todos"]),
@@ -43,7 +49,7 @@ export default {
 };
 </script>
 <style scoped>
-.todo {
-  margin-bottom: 8px;
+.item-move {
+  transition: all 0.5s cubic-bezier(0.55, 0, 0.1, 1);
 }
 </style>

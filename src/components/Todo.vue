@@ -1,16 +1,17 @@
 <template>
-  <div class="todo">
-    <md-card class="md-primary" :style="colorStyle(todo.priority)" md-theme="primary-card">
-      <md-card-header>
-        <div class="md-title">{{ todo.name }}</div>
-      </md-card-header>
-      <md-card-actions>
-        <Priorities @onHappy="updatePriority"/>
-        <md-button class="md-icon-button" @click="remove()">
-          <md-icon>delete</md-icon>
-        </md-button>
-      </md-card-actions>
-    </md-card>
+  <div
+    class="todo"
+    @mouseover="mouseEnter"
+    @mouseleave="mouseLeave"
+    :style="colorStyle(todo.priority)"
+  >
+    <span class="md-title title">{{ todo.name }}</span>
+    <div class="actions" v-show="toShowOnHover">
+      <Priorities @onHappy="updatePriority" />
+      <md-button class="md-icon-button" @click="remove()">
+        <md-icon>delete</md-icon>
+      </md-button>
+    </div>
   </div>
 </template>
 
@@ -21,30 +22,52 @@ export default {
   name: "Todo",
   props: ["todo"],
   components: {
-    Priorities
+    Priorities,
   },
+  data: () => ({
+    toShowOnHover: false,
+  }),
   methods: {
     colorStyle(prioty) {
-      let color = "#fdd9d7"
+      let color = "#fdd9d7";
       if (prioty == 1) {
-        color = "#cdeefd"
+        color = "#cdeefd";
       } else if (prioty == 2) {
-        color = "#dbefdc"
+        color = "#dbefdc";
       }
-      return { backgroundColor: `${color} !important`}
+      return { backgroundColor: `${color} !important` };
     },
     updatePriority(p) {
       this.todo.priority = p;
-      this.$store.dispatch('updateTodo', this.todo)
+      this.$store.dispatch("updateTodo", this.todo);
     },
     remove() {
-      this.$store.dispatch('removeTodo', this.todo)
+      this.$store.dispatch("removeTodo", this.todo);
+    },
+    mouseEnter() {
+      this.toShowOnHover = !this.toShowOnHover;
+    },
+    mouseLeave() {
+      this.toShowOnHover = false;
     },
   },
 };
 </script>
 <style scoped>
 .todo {
-  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.title {
+  padding: 16px;
+}
+.actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }
 </style>
