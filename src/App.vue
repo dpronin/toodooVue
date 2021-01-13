@@ -6,8 +6,13 @@
           >TooDoo</router-link
         >
         <router-link v-if="user !==null && user.user !== null" to="/add">
-          <md-button class="md-icon-button md-raised md-accent">
+          <md-button class="md-icon-button">
             <md-icon>add</md-icon>
+          </md-button>
+        </router-link>
+        <router-link v-if="user !==null && user.user !== null" to="/archived">
+          <md-button class="md-icon-button">
+            <md-icon>archive</md-icon>
           </md-button>
         </router-link>
         <md-button v-if="user !==null && user.user !== null" @click="logout()" class="md-icon-button">

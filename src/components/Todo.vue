@@ -1,14 +1,14 @@
 <template>
   <div
     class="todo"
-    @mouseover="mouseEnter"
+    @mouseenter="mouseEnter"
     @mouseleave="mouseLeave"
-    :style="colorStyle(todo.priority)"
+    :style="colorStyle(todo.priority, isArchived)"
   >
-    <span class="md-title title">{{ todo.name }}</span>
+    <span class="md-title title" v-show="!toShowOnHover">{{ todo.name }}</span>
     <div class="actions" v-show="toShowOnHover">
-      <Priorities @onHappy="updatePriority" />
-      <md-button class="md-icon-button" @click="remove()">
+      <Priorities @update="updatePriority" />
+      <md-button class="md-icon-button" @click="remove(isArchived)">
         <md-icon>delete</md-icon>
       </md-button>
     </div>
@@ -20,7 +20,7 @@ import Priorities from "@/components/Priorities.vue";
 
 export default {
   name: "Todo",
-  props: ["todo"],
+  props: ["todo", "isArchived"],
   components: {
     Priorities,
   },
@@ -28,12 +28,16 @@ export default {
     toShowOnHover: false,
   }),
   methods: {
-    colorStyle(prioty) {
+    colorStyle(prioty, isArchived) {
       let color = "#fdd9d7";
-      if (prioty == 1) {
-        color = "#cdeefd";
-      } else if (prioty == 2) {
-        color = "#dbefdc";
+      if (!isArchived) {
+        if (prioty == 1) {
+          color = "#cdeefd";
+        } else if (prioty == 2) {
+          color = "#dbefdc";
+        }
+      } else {
+        color = "#cfd8dc"
       }
       return { backgroundColor: `${color} !important` };
     },
@@ -41,8 +45,13 @@ export default {
       this.todo.priority = p;
       this.$store.dispatch("updateTodo", this.todo);
     },
-    remove() {
-      this.$store.dispatch("removeTodo", this.todo);
+    remove(isArchived) {
+      if (isArchived) {
+        this.$store.dispatch("removeTodo", this.todo);
+      } else {
+        this.todo.status = "archived";
+        this.$store.dispatch("updateTodo", this.todo);
+      }
     },
     mouseEnter() {
       this.toShowOnHover = !this.toShowOnHover;
@@ -69,5 +78,6 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  z-index: 1000;
 }
 </style>

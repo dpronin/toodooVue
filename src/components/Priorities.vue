@@ -17,7 +17,7 @@ export default {
   name: "Priorities",
   methods: {
     updatePriority(a) {
-      this.$emit("onHappy", a);
+      this.$emit("update", a);
     },
   },
 };

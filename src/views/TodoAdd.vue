@@ -6,7 +6,7 @@
       <md-input v-model="todoName" maxlength="100"></md-input>
     </md-field>
     <div class="md-layout md-gutter">
-      <Priorities @onHappy="setPriority"/>
+      <Priorities @update="setPriority"/>
     </div>
     <md-button :class="priority" @click="createTodo()" class="md-icon-button md-raised md-primary">
       <md-icon>add</md-icon>

@@ -1,29 +1,27 @@
 <template>
   <div class="todos">
     <waterfall
-      v-if="todos.length"
+      v-if="archivedTodos.length"
       :line-gap="200"
       :min-line-gap="100"
       :max-line-gap="220"
       :single-max-width="300"
-      :watch=todos
     >
       <waterfall-slot
-        v-for="(item, index) in todos"
+        v-for="(item, index) in archivedTodos"
         :width="1"
         :height="1"
         :order="index"
         :key="item.id"
         move-class="item-move"
       >
-        <Todo :todo="item" v-bind:is-archived="false"/>
+        <Todo :todo="item" v-bind:is-archived="true"/>
       </waterfall-slot>
     </waterfall>
     <div v-else>
       <md-empty-state
-        md-icon="add_task"
-        md-label="Create your first todo"
-        md-description="By click on + button"
+        md-icon="done_all"
+        md-label="Archived todo will be there"
       >
       </md-empty-state>
     </div>
@@ -38,15 +36,18 @@ import Waterfall from "vue-waterfall/lib/waterfall";
 import WaterfallSlot from "vue-waterfall/lib/waterfall-slot";
 
 export default {
-  name: "Todos",
+  name: "Archived",
   components: {
     Todo,
     Waterfall,
     WaterfallSlot,
   },
   computed: {
-    ...mapState(["todos"]),
+    ...mapState(["archivedTodos"]),
   },
+  created() {
+    this.$store.dispatch('fetchArchivedTodos');
+  }
 };
 </script>
 <style scoped>
