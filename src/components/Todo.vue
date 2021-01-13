@@ -7,7 +7,11 @@
   >
     <span class="md-title title" v-show="!toShowOnHover">{{ todo.name }}</span>
     <div class="actions" v-show="toShowOnHover">
-      <Priorities @update="updatePriority" />
+      <Priorities v-if="!isArchived" @update="updatePriority" />
+      <md-button v-if="isArchived" class="md-icon-button" @click="restore()">
+        <md-icon>restore</md-icon>
+      </md-button>
+      <hr />
       <md-button class="md-icon-button" @click="remove(isArchived)">
         <md-icon>delete</md-icon>
       </md-button>
@@ -37,7 +41,7 @@ export default {
           color = "#dbefdc";
         }
       } else {
-        color = "#cfd8dc"
+        color = "#cfd8dc";
       }
       return { backgroundColor: `${color} !important` };
     },
@@ -52,6 +56,10 @@ export default {
         this.todo.status = "archived";
         this.$store.dispatch("updateTodo", this.todo);
       }
+    },
+    restore() {
+      this.todo.status = "ready"
+      this.$store.dispatch("updateTodo", this.todo);
     },
     mouseEnter() {
       this.toShowOnHover = !this.toShowOnHover;
@@ -72,6 +80,9 @@ export default {
 }
 .title {
   padding: 16px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 100%;
 }
 .actions {
   display: flex;

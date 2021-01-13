@@ -97,9 +97,10 @@ const store = new Vuex.Store({
 			})
 			router.push('/')
 		},
-		async updateTodo({ commit }, todo) {
-			console.log(commit);
+		async updateTodo({ commit, dispatch }, todo) {
+			console.log(commit)
 			await fb.todosCollection.doc(todo.id).update(todo)
+			dispatch('fetchArchivedTodos')
 		},
 		async removeTodo({ state, dispatch }, todo) {
 			console.log(state)

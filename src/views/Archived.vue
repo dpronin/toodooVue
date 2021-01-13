@@ -21,7 +21,7 @@
     <div v-else>
       <md-empty-state
         md-icon="done_all"
-        md-label="Archived todo will be there"
+        md-label="Archived todos will be there"
       >
       </md-empty-state>
     </div>
