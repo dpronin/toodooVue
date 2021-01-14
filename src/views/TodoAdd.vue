@@ -3,7 +3,7 @@
     <md-content class="create-form">
     <md-field>
       <label>Name</label>
-      <md-input v-model="todoName" maxlength="100"></md-input>
+      <md-input v-model="todoName" maxlength="60"></md-input>
     </md-field>
     <div class="md-layout md-gutter">
       <Priorities @update="setPriority"/>
