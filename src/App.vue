@@ -1,8 +1,8 @@
 <template>
   <div id="app">
-    <md-speed-dial class="md-bottom-right">
+    <md-speed-dial v-if="user !== null && user.user !== null" class="md-bottom-right">
       <md-speed-dial-target>
-        <router-link v-if="user !== null && user.user !== null" to="/add">
+        <router-link to="/add">
           <md-button class="md-fab md-primary md-icon-button">
             <md-icon>add</md-icon>
           </md-button>
@@ -10,20 +10,19 @@
       </md-speed-dial-target>
 
       <md-speed-dial-content>
-        <router-link v-if="user !== null && user.user !== null" to="/">
+        <router-link to="/">
           <md-button class="md-fab md-primary md-icon-button">
             <md-icon>home</md-icon>
           </md-button>
         </router-link>
 
-        <router-link v-if="user !== null && user.user !== null" to="/archived">
+        <router-link to="/archived">
           <md-button class="md-fab md-primary md-icon-button">
             <md-icon>archive</md-icon>
           </md-button>
         </router-link>
 
-        <md-button
-          v-if="user !== null && user.user !== null"
+        <md-button 
           @click="logout()"
           class="md-icon-button md-primary md-fab"
         >

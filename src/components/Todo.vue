@@ -25,7 +25,7 @@ import Priorities from "@/components/Priorities.vue";
 export default {
   name: "Todo",
   props: ["todo", "isArchived"],
-  components: {
+  components: { 
     Priorities,
   },
   data: () => ({
