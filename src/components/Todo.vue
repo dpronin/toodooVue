@@ -1,8 +1,6 @@
 <template>
   <div
     class="todo"
-    @touchstart="mouseEnter"
-    @touchend="mouseLeave"
     @mouseenter="mouseEnter"
     @mouseleave="mouseLeave"
     :style="colorStyle(todo.priority, isArchived)"
