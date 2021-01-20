@@ -62,7 +62,7 @@ export default {
       this.$store.dispatch("updateTodo", this.todo);
     },
     mouseEnter() {
-      this.toShowOnHover = !this.toShowOnHover;
+       this.toShowOnHover = true;
     },
     mouseLeave() {
       this.toShowOnHover = false;
