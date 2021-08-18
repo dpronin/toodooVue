@@ -1,8 +1,7 @@
 <template>
   <div
     class="todo"
-    @mouseenter="mouseEnter"
-    @mouseleave="mouseLeave"
+    @click="clickHandler"
     :style="colorStyle(todo.priority, isArchived)"
   >
     <span class="md-title title" v-show="!toShowOnHover">{{ todo.name }}</span>
@@ -61,11 +60,8 @@ export default {
       this.todo.status = "ready"
       this.$store.dispatch("updateTodo", this.todo);
     },
-    mouseEnter() {
-       this.toShowOnHover = true;
-    },
-    mouseLeave() {
-      this.toShowOnHover = false;
+    clickHandler() {
+       this.toShowOnHover = !this.toShowOnHover;
     },
   },
 };
